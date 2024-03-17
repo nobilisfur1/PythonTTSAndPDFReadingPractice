@@ -12,7 +12,6 @@ def keyChecker(path: str):
             os.remove(path)
         exit()
 
-
 def speak(text: str):
     engine = pyttsx3.init()
     voices = engine.getProperty("voices")
@@ -78,4 +77,5 @@ def main():
         os.remove(txt)
 
 if __name__ == "__main__":
+    print("starting")
     main()
