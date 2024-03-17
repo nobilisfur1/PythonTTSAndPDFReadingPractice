@@ -67,7 +67,10 @@ def main():
         keyChecker(txt)
 
     else:
-        txtin = input("input your text: ")
+        while True:
+            txtin = input("input your text: ")
+            if txtin.replace(" ","").isalnum() == True:
+                break
         threading.Thread(target=speak, args=(txtin,)).start()
         keyChecker("oof")
     
