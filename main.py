@@ -1,6 +1,16 @@
 import pyttsx3
-from pypdf import PdfReader
+import threading
 import os
+from pypdf import PdfReader
+
+
+def keyChecker(path: str):
+    esc = False
+    while esc == False:
+        input("press enter to end.")
+        if os.path.exists(path):
+            os.remove(path)
+        exit()
 
 
 def speak(text: str):
@@ -8,13 +18,13 @@ def speak(text: str):
     voices = engine.getProperty("voices")
     engine.setProperty("voice", voices[0].id)
     engine.setProperty("rate", 200)
-    try:
+    if os.path.exists(text):
         with open(text) as f:
             line = f.readlines()
             for word in line:
                 engine.say(word)
                 engine.runAndWait()
-    except:
+    else:
         engine.say(text)
         engine.runAndWait()
 
@@ -53,10 +63,13 @@ def main():
     if ans[0] == "y":
         path = input("input the file path: ")
         txt = readpdf(path)
-        speak(txt)
+        threading.Thread(target=speak, args=(txt,)).start()
+        keyChecker(txt)
+
     else:
         txtin = input("input your text: ")
-        speak(txtin)
+        threading.Thread(target=speak, args=(txtin,)).start()
+        keyChecker("oof")
     
     if os.path.exists(txt):
         os.remove(txt)
