@@ -1,5 +1,6 @@
 import pyttsx3
 from pypdf import PdfReader
+import os
 
 
 def speak(text: str):
@@ -7,9 +8,17 @@ def speak(text: str):
     voices = engine.getProperty("voices")
     engine.setProperty("voice", voices[0].id)
     engine.setProperty("rate", 200)
-    engine.say(text)
-    engine.runAndWait()
+    try:
+        with open(text) as f:
+            line = f.readlines()
+            for word in line:
+                engine.say(word)
+                engine.runAndWait()
+    except:
+        engine.say(text)
+        engine.runAndWait()
 
+        
 
 def writeNames():
     engine = pyttsx3.init()
@@ -25,16 +34,18 @@ def writeNames():
 
 def readpdf(path: str) -> str:
     reader = PdfReader(path)
-    page = reader.pages[0]
-    text = page.extract_text().replace(" ", "")
-    f = open("tts/pdf.txt", "w")
-    f.write(text)
-    return text
+    text = []
+    for i in range(len(reader.pages)):
+        page = reader.pages[i]
+        text.append(page.extract_text().replace(" ", "").replace("\n", " "))
+        f = open("tts/pdf.txt", "a")
+        f.write(text[i])
+    return "tts/pdf.txt"
 
 
 def main():
-    print("Is this a pdf file?")
     while True:
+        print("Is this a pdf file? (y or n)")
         ans = input()
         if ans[0].lower() == "y" or ans[0].lower() == "n":
             break
@@ -47,6 +58,8 @@ def main():
         txtin = input("input your text: ")
         speak(txtin)
     
+    if os.path.exists(txt):
+        os.remove(txt)
 
 if __name__ == "__main__":
     main()
