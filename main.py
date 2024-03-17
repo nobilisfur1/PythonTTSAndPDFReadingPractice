@@ -77,5 +77,4 @@ def main():
         os.remove(txt)
 
 if __name__ == "__main__":
-    print("hrlp")
     main()
