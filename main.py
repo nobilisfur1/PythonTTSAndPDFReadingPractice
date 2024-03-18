@@ -1,6 +1,7 @@
 import pyttsx3
 import threading
 import os
+import keyboard
 from pypdf import PdfReader
 
 
@@ -31,7 +32,7 @@ def speak(text: str):
 
 def writeNames():
     engine = pyttsx3.init()
-    f = open("tts/voices.txt", "w")
+    f = open("voices.txt", "w")
     voices = engine.getProperty("voices")
     for i in range(len(voices)):
         f.write(str(i) + ": ")
@@ -47,9 +48,9 @@ def readpdf(path: str) -> str:
     for i in range(len(reader.pages)):
         page = reader.pages[i]
         text.append(page.extract_text().replace(" ", "").replace("\n", " "))
-        f = open("tts/pdf.txt", "a")
+        f = open("pdf.txt", "a")
         f.write(text[i])
-    return "tts/pdf.txt"
+    return "pdf.txt"
 
 
 def main():
@@ -62,7 +63,8 @@ def main():
     if ans[0] == "y":
         path = input("input the file path: ")
         txt = readpdf(path)
-        threading.Thread(target=speak, args=(txt,)).start()
+        p = threading.Thread(target=speak, args=(txt,))
+        p.start()
         keyChecker(txt)
 
     else:
