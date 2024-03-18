@@ -1,7 +1,6 @@
 import pyttsx3
 import threading
 import os
-import keyboard
 from pypdf import PdfReader
 
 
