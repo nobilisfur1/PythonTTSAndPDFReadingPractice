@@ -1,15 +1,13 @@
 import pyttsx3
 import threading
 import os
+import pynput
+from pynput import keyboard
 from pypdf import PdfReader
 
 #put this together so the user can end the speech partway through, could be done much better I bet. looking into it
-def keyChecker(path: str):
-    esc = False
-    while esc == False:
-        input("press enter to end.")
-        if os.path.exists(path):
-            os.remove(path)
+def on_press(key):
+    if key == pynput.keyboard.Key.esc:
         exit()
 
 def speak(text: str):
@@ -66,7 +64,6 @@ def main():
         p = threading.Thread(target=speak, args=(txt,))
         p.setDaemon(True)
         p.start()
-        keyChecker(txt)
         #using threading atm for ending the process early.
         #might move to something else though.
     else:
@@ -77,10 +74,14 @@ def main():
         p = threading.Thread(target=speak, args=(txtin,))
         p.setDaemon(True)
         p.start()
-        keyChecker("oof")
-    
-    if os.path.exists(txt):
-        os.remove(txt)
+        with keyboard.Listener(
+        on_press=on_press) as listener:
+            listener.join()
+    try:
+        if os.path.exists(txt):
+            os.remove(txt)
+    except:
+        pass
 
 if __name__ == "__main__":
     main()
