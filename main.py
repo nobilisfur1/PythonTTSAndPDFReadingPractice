@@ -3,7 +3,7 @@ import threading
 import os
 from pypdf import PdfReader
 
-
+#put this together so the user can end the speech partway through, could be done much better I bet. looking into it
 def keyChecker(path: str):
     esc = False
     while esc == False:
@@ -28,7 +28,7 @@ def speak(text: str):
         engine.runAndWait()
 
         
-
+# This function is/was for figuring out all the voices on the computer
 def writeNames():
     engine = pyttsx3.init()
     f = open("voices.txt", "w")
@@ -40,7 +40,8 @@ def writeNames():
             f.write("\n\n")
     f.close
 
-
+# To read the pdf. Not perfect so I did my best to delete the spaces (there were spaces between every letter in one doc)
+# And replace new lines with spaces. Sure there will be some bugs later
 def readpdf(path: str) -> str:
     reader = PdfReader(path)
     text = []
@@ -62,8 +63,8 @@ def main():
     if ans[0] == "y":
         path = input("input the file path: ")
         txt = readpdf(path)
-        p = threading.Thread(target=speak, args=(txt,))
-        p.start()
+        p = threading.Thread(target=speak, args=(txt,))  #using threading atm for ending the process early.
+        p.start()                                        #might move to something else though.
         keyChecker(txt)
 
     else:
