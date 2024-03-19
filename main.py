@@ -63,16 +63,20 @@ def main():
     if ans[0] == "y":
         path = input("input the file path: ")
         txt = readpdf(path)
-        p = threading.Thread(target=speak, args=(txt,))  #using threading atm for ending the process early.
-        p.start()                                        #might move to something else though.
+        p = threading.Thread(target=speak, args=(txt,))
+        p.setDaemon(True)
+        p.start()
         keyChecker(txt)
-
+        #using threading atm for ending the process early.
+        #might move to something else though.
     else:
         while True:
             txtin = input("input your text: ")
             if txtin.replace(" ","").isalnum() == True:
                 break
-        threading.Thread(target=speak, args=(txtin,)).start()
+        p = threading.Thread(target=speak, args=(txtin,))
+        p.setDaemon(True)
+        p.start()
         keyChecker("oof")
     
     if os.path.exists(txt):
