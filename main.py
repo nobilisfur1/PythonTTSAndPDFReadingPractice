@@ -18,7 +18,6 @@ def readpdf(path: str) -> str:
     return "pdf.txt"
 
 def main():
-
     talker = textToSpeech()
 
     while True:
@@ -31,8 +30,10 @@ def main():
         path = input("input the file path: ")
         txt = readpdf(path)
         p = threading.Thread(target=talker.speak, args=(txt,))
-        p.setDaemon(True)
         p.start()
+        with keyboard.Listener(
+        on_press=on_press) as listener:
+            listener.join()
         #using threading atm for ending the process early.
         #might move to something else though.
     else:
@@ -41,7 +42,6 @@ def main():
             if txtin.replace(" ","").isalnum() == True:
                 break
         p = threading.Thread(target=talker.speak, args=(txtin,))
-        p.setDaemon(True)
         p.start()
         with keyboard.Listener(
         on_press=on_press) as listener:
