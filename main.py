@@ -39,7 +39,7 @@ def main():
     else:
         while True:
             txtin = input("input your text: ")
-            if txtin.replace(" ","").isalnum() == True:
+            if txtin.replace(" ","").isascii() == True:
                 break
         p = threading.Thread(target=talker.speak, args=(txtin,))
         p.start()
