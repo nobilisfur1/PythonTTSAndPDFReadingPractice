@@ -1,6 +1,6 @@
 from header import *
 
-talker = textToSpeech()
+Talker = textToSpeech()
 # put this together so the user can end the speech partway through, could be done much better I bet. looking into it
 def on_press(key):
     if key == pynput.keyboard.Key.esc:
@@ -29,7 +29,7 @@ def main():
     if ans[0] == "y":
         path = input("input the file path: ")
         txt = readpdf(path)
-        p = threading.Thread(target=talker.speak, args=(txt,))
+        p = threading.Thread(target=Talker.speak, args=(txt,))
         p.start()
         with keyboard.Listener(
         on_press=on_press) as listener:
@@ -41,7 +41,7 @@ def main():
             txtin = input("input your text: ")
             if txtin.replace(" ","").isascii() == True:
                 break
-        p = threading.Thread(target=talker.speak, args=(txtin,))
+        p = threading.Thread(target=Talker.speak, args=(txtin,))
         p.start()
         with keyboard.Listener(
         on_press=on_press) as listener:
