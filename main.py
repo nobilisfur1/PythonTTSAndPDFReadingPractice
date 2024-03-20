@@ -1,42 +1,9 @@
-import pyttsx3
-import threading
-import os
-import pynput
-from pynput import keyboard
-from pypdf import PdfReader
+from header import *
 
-#put this together so the user can end the speech partway through, could be done much better I bet. looking into it
+# put this together so the user can end the speech partway through, could be done much better I bet. looking into it
 def on_press(key):
     if key == pynput.keyboard.Key.esc:
         exit()
-
-def speak(text: str):
-    engine = pyttsx3.init()
-    voices = engine.getProperty("voices")
-    engine.setProperty("voice", voices[0].id)
-    engine.setProperty("rate", 200)
-    if os.path.exists(text):
-        with open(text) as f:
-            line = f.readlines()
-            for word in line:
-                engine.say(word)
-                engine.runAndWait()
-    else:
-        engine.say(text)
-        engine.runAndWait()
-
-        
-# This function is/was for figuring out all the voices on the computer
-def writeNames():
-    engine = pyttsx3.init()
-    f = open("voices.txt", "w")
-    voices = engine.getProperty("voices")
-    for i in range(len(voices)):
-        f.write(str(i) + ": ")
-        f.write("Name: {}\n   Language: {}\n   Gender: {}".format(voices[i].name, voices[i].languages, voices[i].gender))
-        if i != len(voices) - 1:
-            f.write("\n\n")
-    f.close
 
 # To read the pdf. Not perfect so I did my best to delete the spaces (there were spaces between every letter in one doc)
 # And replace new lines with spaces. Sure there will be some bugs later
@@ -50,8 +17,10 @@ def readpdf(path: str) -> str:
         f.write(text[i])
     return "pdf.txt"
 
-
 def main():
+
+    talker = textToSpeech()
+
     while True:
         print("Is this a pdf file? (y or n)")
         ans = input()
@@ -61,7 +30,7 @@ def main():
     if ans[0] == "y":
         path = input("input the file path: ")
         txt = readpdf(path)
-        p = threading.Thread(target=speak, args=(txt,))
+        p = threading.Thread(target=talker.speak, args=(txt,))
         p.setDaemon(True)
         p.start()
         #using threading atm for ending the process early.
@@ -71,7 +40,7 @@ def main():
             txtin = input("input your text: ")
             if txtin.replace(" ","").isalnum() == True:
                 break
-        p = threading.Thread(target=speak, args=(txtin,))
+        p = threading.Thread(target=talker.speak, args=(txtin,))
         p.setDaemon(True)
         p.start()
         with keyboard.Listener(
