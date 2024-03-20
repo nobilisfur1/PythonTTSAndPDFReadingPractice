@@ -1,5 +1,6 @@
 from header import *
 
+talker = textToSpeech()
 # put this together so the user can end the speech partway through, could be done much better I bet. looking into it
 def on_press(key):
     if key == pynput.keyboard.Key.esc:
@@ -18,7 +19,6 @@ def readpdf(path: str) -> str:
     return "pdf.txt"
 
 def main():
-    talker = textToSpeech()
 
     while True:
         print("Is this a pdf file? (y or n)")
