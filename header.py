@@ -12,6 +12,7 @@ class textToSpeech:
         self.engine = pyttsx3.init()
         self.voices = self.engine.getProperty("voices")
 
+
     def speak(self, text: str):
         self.engine.setProperty("voice", self.voices[0].id)
         self.engine.setProperty("rate", 200)
@@ -24,6 +25,7 @@ class textToSpeech:
         else:
             self.engine.say(text)
             self.engine.runAndWait()
+
 
     # This function is/was for figuring out all the voices on the computer
     def getNames(self):
