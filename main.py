@@ -10,6 +10,7 @@ def onPress(key):
     if key == pynput.keyboard.Key.esc:
         exit()
 
+
 def deleteFile(filePath):
     try:
         if os.path.exists(filePath):
@@ -26,6 +27,7 @@ def flow() -> str:
 
     if userAnswer == "pdf":
         File = input("File path: ")
+        return ""
     elif userAnswer == "txt" or userAnswer == "text":
         return input("File path: ")
     else:
@@ -55,6 +57,7 @@ def main():
             on_press=onPress) as listener:
                 listener.join()
     deleteFile(txt)
+
 
 if __name__ == "__main__":
     main()
